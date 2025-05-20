@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Diddy Search Engine</title>
+  <style>
+    body {
+      background-image: url('oil.jpg');
+      background-size: cover;
+      font-family: Arial, sans-serif;
+      text-align: center;
+    }
+    input[type="text"] {
+      padding: 10px;
+      width: 300px;
+    }
+    button {
+      padding: 10px 20px;
+      margin-top: 10px;
+    }
+    .logo {
+      width: 760px;
+      height: 180px;
+    }
+  </style>
+ </head>
+<body>
+<p><img src="diddy1.png" style="float:left;width:760px;height:200px;">
+<p><img src="diddy1.png" style="float:right;width:760px;height:200px;">
+  <h1>Diddy Search</h1>
+  <input type="text" id="searchQuery" placeholder="Type your search..."><br>
+  <button onclick="search()">Search</button>
+  <script>
+    function search() {
+      const query = document.getElementById('searchQuery').value;
+      window.location.href = 'https://www.google.com/search?q=' + encodeURIComponent(query);
+    }
+  </script>
+  <a href="https://www.amazon.com.au/Johnsons-Baby-1960258501-Oil-200mL/dp/B077P8VHJS" target="_blank">
+    <button>Johnson's Baby Oil</button>
+  </a>
+  <a href="game1.html"><button>Wanna play a game?</button></a>
+    <script>
+    const password = prompt("Enter the password to access Diddy Search:");
+    if (password !== "diddy123") {
+      alert("Access Denied!");
+      window.location.href = "https://www.google.com"; // Redirect or block
+    }
+  </script>
+<meta charset="UTF-8">
+</body>
+</html>
