@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Diddy Dodger</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      font-family: Arial, sans-serif;
+      background: #fff;
+      color: black;
+      text-align: center;
+    }
+    #game {
+      position: relative;
+      width: 100vw;
+      height: 100vh;
+      background: #fff;
+    }
+    #diddy {
+      position: absolute;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80px;
+      transition: left 0.1s ease;
+    }
+    .falling {
+      position: absolute;
+      top: 0;
+      width: 40px;
+      height: 40px;
+    }
+    #scoreboard, #lives, #leaderboard {
+      position: absolute;
+      top: 10px;
+      font-size: 20px;
+    }
+    #scoreboard {
+      left: 10px;
+    }
+    #lives {
+      right: 10px;
+    }
+    #leaderboard {
+      top: 50px;
+      right: 10px;
+      background: #f0f0f0;
+      border: 1px solid #ccc;
+      padding: 10px;
+      font-size: 14px;
+      text-align: left;
+    }
+  </style>
+</head>
+<body>
+  <div id="game">
+    <div id="scoreboard">Score: 0</div>
+    <div id="lives">Lives: 3</div>
+    <div id="leaderboard"><strong>Leaderboard</strong><br/></div>
+    <center><a href="diddy search.html"><button>BACK</button></a></center>
+    <img id="diddy" src="diddy.avif" alt="Diddy" />
+  </div>
+
+  <script>
+    const diddy = document.getElementById('diddy');
+    const game = document.getElementById('game');
+    const scoreboard = document.getElementById('scoreboard');
+    const livesDisplay = document.getElementById('lives');
+    const leaderboardDiv = document.getElementById('leaderboard');
+
+    let score = 0;
+    let lives = 3;
+
+    // Move Diddy
+    window.addEventListener('keydown', function(e) {
+      const step = 20;
+      const currentLeft = parseInt(getComputedStyle(diddy).left);
+      if (e.key === 'ArrowLeft' && currentLeft > 0) {
+        diddy.style.left = (currentLeft - step) + 'px';
+      }
+      if (e.key === 'ArrowRight' && currentLeft < window.innerWidth - 80) {
+        diddy.style.left = (currentLeft + step) + 'px';
+      }
+    });
+
+    // Show leaderboard
+    function updateLeaderboard() {
+      const scores = JSON.parse(localStorage.getItem('leaderboard') || '[]');
+      leaderboardDiv.innerHTML = "<strong>Leaderboard</strong><br/>";
+      scores.slice(0, 5).forEach((entry, index) => {
+        leaderboardDiv.innerHTML += `${index + 1}. ${entry.score} pts - ${entry.date}<br/>`;
+      });
+    }
+
+    function saveScore(score) {
+      const scores = JSON.parse(localStorage.getItem('leaderboard') || '[]');
+      scores.push({ score, date: new Date().toLocaleDateString() });
+      scores.sort((a, b) => b.score - a.score);
+      localStorage.setItem('leaderboard', JSON.stringify(scores.slice(0, 10)));
+    }
+
+    // Falling object
+    function spawnFalling() {
+      const fall = document.createElement('img');
+      fall.src = 'oil2.jpg';
+      fall.classList.add('falling');
+      fall.style.left = Math.random() * (window.innerWidth - 40) + 'px';
+      game.appendChild(fall);
+
+      let top = 0;
+      const speed = 3 + score / 10;
+
+      const fallInterval = setInterval(() => {
+        top += speed;
+        fall.style.top = top + 'px';
+
+        const diddyRect = diddy.getBoundingClientRect();
+        const fallRect = fall.getBoundingClientRect();
+
+        if (
+          fallRect.bottom >= diddyRect.top &&
+          fallRect.left < diddyRect.right &&
+          fallRect.right > diddyRect.left
+        ) {
+          game.removeChild(fall);
+          clearInterval(fallInterval);
+          lives--;
+          livesDisplay.textContent = 'Lives: ' + lives;
+
+          if (lives <= 0) {
+            saveScore(score);
+            setTimeout(() => {
+              alert('💥 Game Over! Final Score: ' + score);
+              location.reload();
+            }, 500);
+          }
+        }
+
+        if (top > window.innerHeight) {
+          game.removeChild(fall);
+          clearInterval(fallInterval);
+          score++;
+          scoreboard.textContent = 'Score: ' + score;
+        }
+      }, 20);
+    }
+
+    setInterval(spawnFalling, 1000);
+    updateLeaderboard();
+  </script>
+</body>
+</html>
