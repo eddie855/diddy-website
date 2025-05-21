@@ -42,20 +42,73 @@
     <a href="game2.html"><button>Wanna play another game?</button></a>
 <script>
   const password = prompt("Enter the password to access Diddy Search:");
+  let hacksEnabled = false;
 
   if (password === "diddy123") {
-    // Normal access
     console.log("Welcome, regular user.");
   } else if (password === "1612") {
-    // Hack access
     console.log("Welcome, hacker mode enabled!");
-    // Enable hacks – you can trigger special features here
-    document.body.style.border = "5px solid red"; // Visual hack indicator
-    // Example: auto-fill search box or show secret message
-    window.hacksEnabled = true;
+    hacksEnabled = true;
+    enableHacks();
   } else {
     alert("Access Denied!");
-    window.location.href = "https://www.google.com"; // Redirect or block
+    window.location.href = "https://www.google.com";
+  }
+
+  function enableHacks() {
+    // Add a visual indicator
+    document.body.style.border = "5px dashed red";
+
+    // Create a cheat panel
+    const cheatPanel = document.createElement("div");
+    cheatPanel.innerHTML = `
+      <div id="cheatPanel" style="
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background: rgba(0,0,0,0.8);
+        color: white;
+        padding: 15px;
+        border-radius: 10px;
+        z-index: 9999;
+        font-family: monospace;
+      ">
+        <h4>🛠 Diddy Hacks</h4>
+        <button onclick="maxScore()">Max Score</button><br><br>
+        <button onclick="infiniteLives()">Infinite Lives</button><br><br>
+        <button onclick="togglePanel()">Hide Panel</button>
+      </div>
+    `;
+    document.body.appendChild(cheatPanel);
+  }
+
+  function maxScore() {
+    if (typeof scoreboard !== "undefined") {
+      score = 9999;
+      scoreboard.textContent = "Score: " + score;
+      alert("Score set to 9999!");
+    } else {
+      alert("Score system not found.");
+    }
+  }
+
+  function infiniteLives() {
+    if (typeof lives !== "undefined") {
+      lives = 999;
+      livesDisplay.textContent = "Lives: ∞";
+      alert("Infinite lives enabled!");
+    } else {
+      alert("Lives system not found.");
+    }
+  }
+
+  function togglePanel() {
+    const panel = document.getElementById("cheatPanel");
+    if (panel.style.display === "none") {
+      panel.style.display = "block";
+    } else {
+      panel.style.display = "none";
+    }
   }
 </script>
 <meta charset="UTF-8">
