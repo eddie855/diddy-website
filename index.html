@@ -42,73 +42,25 @@
     <a href="game2.html"><button>Wanna play another game?</button></a>
 <script>
   const password = prompt("Enter the password to access Diddy Search:");
-  let hacksEnabled = false;
 
   if (password === "diddy123") {
-    console.log("Welcome, regular user.");
+    // Standard access – do nothing
   } else if (password === "1612") {
-    console.log("Welcome, hacker mode enabled!");
-    hacksEnabled = true;
-    enableHacks();
+    // Show fake activity log
+    document.body.innerHTML = `
+      <h1>🕵️ Diddy User Activity Log</h1>
+      <ul style="font-family:monospace; text-align: left; max-width: 600px; margin: auto;">
+        <li>🔍 User 1 searched for "banana oil for apes"</li>
+        <li>🎮 User 2 played Diddy Dodger and scored 42</li>
+        <li>🛒 User 3 clicked on Johnson's Baby Oil link</li>
+        <li>🔍 User 4 searched for "how to climb vines faster"</li>
+        <li>🎮 User 5 played Tower Defense and quit at wave 3</li>
+      </ul>
+      <br><button onclick="location.reload()">Back to Search</button>
+    `;
   } else {
     alert("Access Denied!");
     window.location.href = "https://www.google.com";
-  }
-
-  function enableHacks() {
-    // Add a visual indicator
-    document.body.style.border = "5px dashed red";
-
-    // Create a cheat panel
-    const cheatPanel = document.createElement("div");
-    cheatPanel.innerHTML = `
-      <div id="cheatPanel" style="
-        position: fixed;
-        top: 20px;
-        right: 20px;
-        background: rgba(0,0,0,0.8);
-        color: white;
-        padding: 15px;
-        border-radius: 10px;
-        z-index: 9999;
-        font-family: monospace;
-      ">
-        <h4>🛠 Diddy Hacks</h4>
-        <button onclick="maxScore()">Max Score</button><br><br>
-        <button onclick="infiniteLives()">Infinite Lives</button><br><br>
-        <button onclick="togglePanel()">Hide Panel</button>
-      </div>
-    `;
-    document.body.appendChild(cheatPanel);
-  }
-
-  function maxScore() {
-    if (typeof scoreboard !== "undefined") {
-      score = 9999;
-      scoreboard.textContent = "Score: " + score;
-      alert("Score set to 9999!");
-    } else {
-      alert("Score system not found.");
-    }
-  }
-
-  function infiniteLives() {
-    if (typeof lives !== "undefined") {
-      lives = 999;
-      livesDisplay.textContent = "Lives: ∞";
-      alert("Infinite lives enabled!");
-    } else {
-      alert("Lives system not found.");
-    }
-  }
-
-  function togglePanel() {
-    const panel = document.getElementById("cheatPanel");
-    if (panel.style.display === "none") {
-      panel.style.display = "block";
-    } else {
-      panel.style.display = "none";
-    }
   }
 </script>
 <meta charset="UTF-8">
