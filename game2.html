@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Diddy Catcher</title>
+  <style>
+    body {
+      margin: 0;
+      overflow: hidden;
+      background: #c7f0d8;
+      font-family: Arial, sans-serif;
+    }
+    #game {
+      width: 100vw;
+      height: 100vh;
+      position: relative;
+    }
+    #diddy {
+      position: absolute;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80px;
+	  
+    }
+    .banana {
+      position: absolute;
+      width: 40px;
+      height: 40px;
+    }
+    #scoreboard, #missed {
+      position: absolute;
+      top: 10px;
+      font-size: 18px;
+      background: rgba(255, 255, 255, 0.7);
+      padding: 5px 10px;
+      border-radius: 8px;
+    }
+    #scoreboard { left: 10px; }
+    #missed { right: 10px; }
+   </style> 
+</head>
+<body>
+  <div id="game">
+    <div id="scoreboard">Score: 0</div>
+    <div id="missed">Missed: 0</div>
+<center><a href="diddy search.html"><button>BACK</button></a></center>
+ <img id="diddy" src="diddy.avif" alt="Diddy" />
+  </div>
+
+  <script>
+    const game = document.getElementById('game');
+    const diddy = document.getElementById('diddy');
+    const scoreboard = document.getElementById('scoreboard');
+    const missedDisplay = document.getElementById('missed');
+
+    let score = 0;
+    let missed = 0;
+
+    // Move Diddy
+    document.addEventListener('keydown', (e) => {
+      const step = 20;
+      const left = parseInt(window.getComputedStyle(diddy).left);
+
+      if (e.key === 'ArrowLeft' && left > 0) {
+        diddy.style.left = (left - step) + 'px';
+      } else if (e.key === 'ArrowRight' && left < window.innerWidth - 80) {
+        diddy.style.left = (left + step) + 'px';
+      }
+    });
+	
+    // Show leaderboard
+    function updateLeaderboard() {
+      const scores = JSON.parse(localStorage.getItem('leaderboard') || '[]');
+      leaderboardDiv.innerHTML = "<strong>Leaderboard</strong><br/>";
+      scores.slice(0, 5).forEach((entry, index) => {
+        leaderboardDiv.innerHTML += `${index + 1}. ${entry.score} pts - ${entry.date}<br/>`;
+      });
+    }
+
+    // Create falling bananas
+    function spawnBanana() {
+      const banana = document.createElement('img');
+      banana.src ="oil2.jpg"
+      banana.className = 'banana';
+      banana.style.left = Math.random() * (window.innerWidth - 40) + 'px';
+      banana.style.top = '0px';
+      game.appendChild(banana);
+
+      let top = 0;
+      const speed = 3 + score / 10;
+
+      const drop = setInterval(() => {
+        top += speed;
+        banana.style.top = top + 'px';
+
+        const diddyRect = diddy.getBoundingClientRect();
+        const bananaRect = banana.getBoundingClientRect();
+
+        if (
+          bananaRect.bottom >= diddyRect.top &&
+          bananaRect.left < diddyRect.right &&
+          bananaRect.right > diddyRect.left
+        ) {
+          // Caught
+          game.removeChild(banana);
+          clearInterval(drop);
+          score++;
+          scoreboard.textContent = 'Score: ' + score;
+        } else if (top > window.innerHeight) {
+          // Missed
+          game.removeChild(banana);
+          clearInterval(drop);
+          missed++;
+          missedDisplay.textContent = 'Missed: ' + missed;
+          if (missed >= 10) {
+            alert('🍌 Game Over! Final Score: ' + score);
+            location.reload();
+          }
+        }
+      }, 20);
+    }
+
+    setInterval(spawnBanana, 1000);
+  </script>
+</body>
+</html>
