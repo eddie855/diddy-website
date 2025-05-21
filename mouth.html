@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Inside Diddy's Mouth</title>
+  <style>
+    body {
+      background-color: #000;
+      color: #fff;
+      font-family: 'Comic Sans MS', cursive, sans-serif;
+      text-align: center;
+      padding: 50px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    h1 {
+      font-size: 3em;
+      color: #ff69b4;
+      margin-bottom: 20px;
+    }
+
+    .mouth {
+      background: #551a1a;
+      border-radius: 50% 50% 45% 45% / 60% 60% 40% 40%;
+      width: 600px;
+      height: 400px;
+      margin: 0 auto;
+      position: relative;
+      box-shadow: inset 0 0 50px rgba(0, 0, 0, 0.5);
+      padding: 30px;
+    }
+
+    .baby-icon {
+      width: 60px;
+      height: 60px;
+      margin: 20px;
+      cursor: pointer;
+      transition: transform 0.2s ease;
+    }
+
+    .baby-icon:hover {
+      transform: scale(1.2);
+    }
+
+    .babies {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .baby-emoji {
+      position: absolute;
+      font-size: 2em;
+      animation: float 20s linear infinite;
+      opacity: 0.6;
+    }
+
+    @keyframes float {
+      0% {
+        transform: translateY(100vh) rotate(0deg);
+      }
+      100% {
+        transform: translateY(-200px) rotate(360deg);
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Inside Diddy's Mouth</h1>
+  <div class="mouth">
+    <div class="babies">
+      <img src="https://cdn-icons-png.flaticon.com/512/2950/2950668.png" class="baby-icon" onclick="goToRandomSite()" />
+      <img src="https://cdn-icons-png.flaticon.com/512/2950/2950668.png" class="baby-icon" onclick="goToRandomSite()" />
+      <img src="https://cdn-icons-png.flaticon.com/512/2950/2950668.png" class="baby-icon" onclick="goToRandomSite()" />
+      <img src="https://cdn-icons-png.flaticon.com/512/2950/2950668.png" class="baby-icon" onclick="goToRandomSite()" />
+	    <center><a href="index.html"><button>BACK</button></a></center>
+    </div>
+  </div>
+
+  <script>
+    const funSites = [
+      "https://pointerpointer.com/",
+      "https://cat-bounce.com/",
+      "https://theuselessweb.com/",
+      "https://weirdorconfusing.com/",
+      "https://www.zoomquilt.org/",
+      "https://www.fallingfalling.com/",
+      "https://alwaysjudgeabookbyitscover.com/"
+    ];
+
+    function goToRandomSite() {
+      const randomIndex = Math.floor(Math.random() * funSites.length);
+      window.open(funSites[randomIndex], "_blank");
+    }
+
+    // Add floating baby emojis
+    for (let i = 0; i < 30; i++) {
+      const emoji = document.createElement('div');
+      emoji.classList.add('baby-emoji');
+      emoji.innerText = '👶';
+      emoji.style.left = Math.random() * 100 + 'vw';
+      emoji.style.top = Math.random() * 100 + 'vh';
+      emoji.style.animationDuration = (10 + Math.random() * 20) + 's';
+      document.body.appendChild(emoji);
+    }
+  </script>
+
+</body>
+</html>
