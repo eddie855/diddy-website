@@ -26,7 +26,7 @@
       left: 50px;
       width: 80px;
       height: 80px;
-      background: url('diddy.avif') no-repeat center;
+      background: url('diddy1.png') no-repeat center;
       background-size: contain;
     }
     .obstacle {
@@ -74,12 +74,12 @@
                 isJumping = false;
               } else {
                 position -= 5;
-                diddy.style.bottom = position + 'px';
+                diddy1.style.bottom = position + 'px';
               }
             }, 20);
           } else {
             position += 5;
-            diddy.style.bottom = position + 'px';
+            diddy1.style.bottom = position + 'px';
           }
         }, 20);
       }
@@ -102,7 +102,7 @@
         } else if (
           obstacleLeft < 130 &&
           obstacleLeft > 50 &&
-          parseInt(diddy.style.bottom) < 50
+          parseInt(diddy1.style.bottom) < 50
         ) {
           clearInterval(moveInterval);
           alert('💥 Game Over! Final Score: ' + score);
