@@ -43,21 +43,7 @@
 <script>
   const password = prompt("Enter the password to access Diddy Search:");
 
-  if (password === "diddy123") {
-    // Standard access – do nothing
-  } else if (password === "1612") {
-    // Show fake activity log
-    document.body.innerHTML = `
-      <h1>🕵️ Diddy User Activity Log</h1>
-      <ul style="font-family:monospace; text-align: left; max-width: 600px; margin: auto;">
-        <li>🔍 User 1 searched for "banana oil for apes"</li>
-        <li>🎮 User 2 played Diddy Dodger and scored 42</li>
-        <li>🛒 User 3 clicked on Johnson's Baby Oil link</li>
-        <li>🔍 User 4 searched for "how to climb vines faster"</li>
-        <li>🎮 User 5 played Tower Defense and quit at wave 3</li>
-      </ul>
-      <br><button onclick="location.reload()">Back to Search</button>
-    `;
+  if (password === "diddy123")
   } else {
     alert("Access Denied!");
     window.location.href = "https://www.google.com";
