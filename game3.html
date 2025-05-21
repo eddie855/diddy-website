@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Diddy Dinosaur Game</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      background: #fffacd;
+      font-family: Arial, sans-serif;
+      overflow: hidden;
+    }
+    #game {
+      position: relative;
+      width: 100vw;
+      height: 100vh;
+      background: #c2f0c2;
+      overflow: hidden;
+    }
+    #diddy {
+      position: absolute;
+      bottom: 0;
+      left: 50px;
+      width: 80px;
+      height: 80px;
+      background: url('diddy1.png') no-repeat center;
+      background-size: contain;
+    }
+    .obstacle {
+      position: absolute;
+      bottom: 0;
+      width: 50px;
+      height: 50px;
+      background: url('oil2.jpg') no-repeat center;
+      background-size: cover;
+    }
+    #score {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      font-size: 24px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <div id="game">
+    <div id="diddy"></div>
+    <div id="score">Score: 0</div>
+	<center><a href="index.html"><button>BACK</button></a></center>
+  </div>
+
+  <script>
+    const diddy = document.getElementById('diddy');
+    const game = document.getElementById('game');
+    const scoreDisplay = document.getElementById('score');
+    let isJumping = false;
+    let score = 0;
+
+    // Jump logic
+    document.addEventListener('keydown', (e) => {
+      if (e.code === 'Space' && !isJumping) {
+        isJumping = true;
+        let position = 0;
+        const upInterval = setInterval(() => {
+          if (position >= 150) {
+            clearInterval(upInterval);
+            const downInterval = setInterval(() => {
+              if (position <= 0) {
+                clearInterval(downInterval);
+                isJumping = false;
+              } else {
+                position -= 5;
+                diddy.style.bottom = position + 'px';
+              }
+            }, 20);
+          } else {
+            position += 5;
+            diddy.style.bottom = position + 'px';
+          }
+        }, 20);
+      }
+    });
+
+    // Create and move obstacles
+    function createObstacle() {
+      const obstacle = document.createElement('div');
+      obstacle.classList.add('obstacle');
+      let obstacleLeft = window.innerWidth;
+      obstacle.style.left = obstacleLeft + 'px';
+      game.appendChild(obstacle);
+
+      const moveInterval = setInterval(() => {
+        if (obstacleLeft < -50) {
+          clearInterval(moveInterval);
+          game.removeChild(obstacle);
+          score++;
+          scoreDisplay.textContent = 'Score: ' + score;
+        } else if (
+          obstacleLeft < 130 &&
+          obstacleLeft > 50 &&
+          parseInt(diddy.style.bottom) < 50
+        ) {
+          clearInterval(moveInterval);
+          alert('💥 Game Over! Final Score: ' + score);
+          location.reload();
+        } else {
+          obstacleLeft -= 5;
+          obstacle.style.left = obstacleLeft + 'px';
+        }
+      }, 20);
+
+      setTimeout(createObstacle, 1500 + Math.random() * 1000);
+    }
+
+    createObstacle();
+  </script>
+</body>
+</html>
