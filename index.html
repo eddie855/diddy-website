@@ -1,16 +1,27 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta charset="UTF-8">
   <title>Diddy Search Engine</title>
   <style>
-  </head>
     body {
       background-image: url('oil.jpg');
       background-size: cover;
       font-family: Arial, sans-serif;
       text-align: center;
-      </style>
+    }
+    input[type="text"] {
+      padding: 10px;
+      width: 300px;
+    }
+    button {
+      padding: 10px 20px;
+      margin-top: 10px;
+    }
+    .logo {
+      width: 760px;
+      height: 180px;
+    }
+  </style>
  </head>
 <body>
 <p><img src="diddy1.png" style="float:left;width:760px;height:200px;">
@@ -26,17 +37,17 @@
   </script>
   <a href="https://www.amazon.com.au/Johnsons-Baby-1960258501-Oil-200mL/dp/B077P8VHJS" target="_blank">
     <button>Johnson's Baby Oil</button></a>
+   <a href="mouth.html"><button>whats inside diddys mouth?</button></a>
    <a href="mouth.html"><button>Whats inside diddys mouth?</button></a>
   <a href="game1.html"><button>Wanna play a game?</button></a>
     <a href="game2.html"><button>Wanna play another game?</button></a>
   <a href="game3.html"><button>Wanna play another game?</button></a>
 <script>
-  const password = prompt("Enter the password to play index:");
-  const allowedPasswords = ["diddy123"];
-
-  if (!allowedPasswords.includes(password)) {
+  const password = prompt("Enter the password to access Diddy Search:");
+  if (password === "diddy123")
+  } else {
     alert("Access Denied!");
-    window.location.href = "https://eddie855.github.io/diddy-website/index.html; // or your desired redirect"
+    window.location.href = "https://www.google.com";
   }
 </script>
 <meta charset="UTF-8">
