@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Diddy Simulator</title>
+  <style>
+    body {
+      margin: 0;
+      overflow: hidden;
+      background: #cbe4f9;
+      font-family: sans-serif;
+    }
+    #gameCanvas {
+      display: block;
+      margin: 0 auto;
+      background-color: #88c;
+    }
+  </style>
+</head>
+<body>
+<canvas id="gameCanvas" width="800" height="600"></canvas>
+<script>
+  const canvas = document.getElementById('gameCanvas');
+  const ctx = canvas.getContext('2d');
+
+  const diddyImg = new Image();
+  diddyImg.src = 'diddys face.avif';
+
+  const bananaImg = new Image();
+  bananaImg.src = 'https://upload.wikimedia.org/wikipedia/commons/8/8a/Banana-Single.jpg';
+
+  const barrelImg = new Image();
+  barrelImg.src = 'https://upload.wikimedia.org/wikipedia/commons/1/18/Oil_barrel_icon.png';
+
+  const player = {
+    x: 100,
+    y: 100,
+    size: 48,
+    speed: 4,
+    score: 0
+  };
+
+  const items = [];
+
+  function spawnItem() {
+    const types = ['banana', 'barrel'];
+    const type = types[Math.floor(Math.random() * types.length)];
+    const x = Math.random() * (canvas.width - 48);
+    const y = Math.random() * (canvas.height - 48);
+    items.push({ type, x, y, collected: false });
+  }
+
+  setInterval(spawnItem, 2000);
+
+  const keys = {};
+
+  window.addEventListener('keydown', e => keys[e.key] = true);
+  window.addEventListener('keyup', e => keys[e.key] = false);
+
+  function update() {
+    if (keys['ArrowUp']) player.y -= player.speed;
+    if (keys['ArrowDown']) player.y += player.speed;
+    if (keys['ArrowLeft']) player.x -= player.speed;
+    if (keys['ArrowRight']) player.x += player.speed;
+
+    player.x = Math.max(0, Math.min(canvas.width - player.size, player.x));
+    player.y = Math.max(0, Math.min(canvas.height - player.size, player.y));
+
+    for (const item of items) {
+      if (!item.collected &&
+          player.x < item.x + 32 &&
+          player.x + player.size > item.x &&
+          player.y < item.y + 32 &&
+          player.y + player.size > item.y) {
+        item.collected = true;
+        player.score += item.type === 'banana' ? 1 : 5;
+      }
+    }
+  }
+
+  function draw() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    // Draw player
+    ctx.drawImage(diddyImg, player.x, player.y, player.size, player.size);
+
+    // Draw items
+    for (const item of items) {
+      if (!item.collected) {
+        const img = item.type === 'banana' ? bananaImg : barrelImg;
+        ctx.drawImage(img, item.x, item.y, 32, 32);
+      }
+    }
+
+    // Draw score
+    ctx.fillStyle = "white";
+    ctx.font = "20px Arial";
+    ctx.fillText("Score: " + player.score, 10, 25);
+  }
+
+  function gameLoop() {
+    update();
+    draw();
+    requestAnimationFrame(gameLoop);
+  }
+
+  diddyImg.onload = () => {
+    gameLoop();
+  };
+</script>
+</body>
+</html>
