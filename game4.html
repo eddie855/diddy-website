@@ -2,111 +2,95 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Diddy Simulator</title>
+  <title>Diddy Oil Tycoon Simulator</title>
   <style>
     body {
-      margin: 0;
-      overflow: hidden;
-      background: #cbe4f9;
-      font-family: sans-serif;
+      font-family: Arial, sans-serif;
+      background: #fef9e7;
+      text-align: center;
+      padding: 30px;
     }
-    #gameCanvas {
-      display: block;
-      margin: 0 auto;
-      background-color: #88c;
+    h1 {
+      font-size: 40px;
+      color: #d35400;
+    }
+    #diddy {
+      width: 150px;
+      cursor: pointer;
+    }
+    #coins {
+      font-size: 24px;
+      margin-top: 20px;
+    }
+    .upgrade {
+      margin: 15px;
+      padding: 10px 20px;
+      background-color: #f39c12;
+      border: none;
+      color: white;
+      cursor: pointer;
+      font-size: 18px;
+      border-radius: 8px;
     }
   </style>
 </head>
 <body>
-<canvas id="gameCanvas" width="800" height="600"></canvas>
-<script>
-  const canvas = document.getElementById('gameCanvas');
-  const ctx = canvas.getContext('2d');
+<center><a href="index.html"><button>BACK</button></a></center>
+  <h1>🛢 Diddy Oil Tycoon Simulator</h1>
+  <p>Click Diddy to earn Oil Coins!</p>
+  <img id="diddy" src="diddys face.avif" alt="Diddy" />
 
-  const diddyImg = new Image();
-  diddyImg.src = 'diddys face.avif';
+  <div id="coins">Oil Coins: 0</div>
 
-  const bananaImg = new Image();
-  bananaImg.src = 'https://upload.wikimedia.org/wikipedia/commons/8/8a/Banana-Single.jpg';
+  <div>
+    <button class="upgrade" onclick="buyUpgrade()">Buy Bigger Barrel (Cost: 50)</button>
+    <button class="upgrade" onclick="buyDrill()">Buy Oil Drill (Cost: 200)</button>
+  </div>
 
-  const barrelImg = new Image();
-  barrelImg.src = 'https://upload.wikimedia.org/wikipedia/commons/1/18/Oil_barrel_icon.png';
+  <script>
+    let coins = 0;
+    let coinsPerClick = 1;
+    let autoCoins = 0;
 
-  const player = {
-    x: 100,
-    y: 100,
-    size: 48,
-    speed: 4,
-    score: 0
-  };
+    const coinDisplay = document.getElementById("coins");
+    const diddy = document.getElementById("diddy");
 
-  const items = [];
+    diddy.addEventListener("click", () => {
+      coins += coinsPerClick;
+      updateDisplay();
+    });
 
-  function spawnItem() {
-    const types = ['banana', 'barrel'];
-    const type = types[Math.floor(Math.random() * types.length)];
-    const x = Math.random() * (canvas.width - 48);
-    const y = Math.random() * (canvas.height - 48);
-    items.push({ type, x, y, collected: false });
-  }
-
-  setInterval(spawnItem, 2000);
-
-  const keys = {};
-
-  window.addEventListener('keydown', e => keys[e.key] = true);
-  window.addEventListener('keyup', e => keys[e.key] = false);
-
-  function update() {
-    if (keys['ArrowUp']) player.y -= player.speed;
-    if (keys['ArrowDown']) player.y += player.speed;
-    if (keys['ArrowLeft']) player.x -= player.speed;
-    if (keys['ArrowRight']) player.x += player.speed;
-
-    player.x = Math.max(0, Math.min(canvas.width - player.size, player.x));
-    player.y = Math.max(0, Math.min(canvas.height - player.size, player.y));
-
-    for (const item of items) {
-      if (!item.collected &&
-          player.x < item.x + 32 &&
-          player.x + player.size > item.x &&
-          player.y < item.y + 32 &&
-          player.y + player.size > item.y) {
-        item.collected = true;
-        player.score += item.type === 'banana' ? 1 : 5;
-      }
+    function updateDisplay() {
+      coinDisplay.textContent = "Oil Coins: " + coins;
     }
-  }
 
-  function draw() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-    // Draw player
-    ctx.drawImage(diddyImg, player.x, player.y, player.size, player.size);
-
-    // Draw items
-    for (const item of items) {
-      if (!item.collected) {
-        const img = item.type === 'banana' ? bananaImg : barrelImg;
-        ctx.drawImage(img, item.x, item.y, 32, 32);
+    function buyUpgrade() {
+      if (coins >= 50) {
+        coins -= 50;
+        coinsPerClick += 1;
+        updateDisplay();
+        alert("Your barrels got bigger! Coins per click: " + coinsPerClick);
+      } else {
+        alert("Not enough coins!");
       }
     }
 
-    // Draw score
-    ctx.fillStyle = "white";
-    ctx.font = "20px Arial";
-    ctx.fillText("Score: " + player.score, 10, 25);
-  }
+    function buyDrill() {
+      if (coins >= 200) {
+        coins -= 200;
+        autoCoins += 1;
+        updateDisplay();
+        alert("You hired an auto-drilling rig!");
+      } else {
+        alert("Not enough coins!");
+      }
+    }
 
-  function gameLoop() {
-    update();
-    draw();
-    requestAnimationFrame(gameLoop);
-  }
+    setInterval(() => {
+      coins += autoCoins;
+      updateDisplay();
+    }, 1000);
+  </script>
 
-  diddyImg.onload = () => {
-    gameLoop();
-  };
-</script>
 </body>
 </html>
