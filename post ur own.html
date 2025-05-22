@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Upload & Play Your Game</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding: 20px;
+    }
+    iframe {
+      width: 90%;
+      height: 600px;
+      border: 2px solid black;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Upload Your Game (HTML File)</h1>
+  <input type="file" id="upload" accept=".html"><br>
+  <iframe id="gameFrame"></iframe>
+
+  <script>
+    document.getElementById('upload').addEventListener('change', function(e) {
+      const file = e.target.files[0];
+      if (file && file.type === "text/html") {
+        const reader = new FileReader();
+        reader.onload = function(event) {
+          const iframe = document.getElementById('gameFrame');
+          iframe.srcdoc = event.target.result;
+        };
+        reader.readAsText(file);
+      } else {
+        alert("Please upload a valid .html file.");
+      }
+    });
+  </script>
+</body>
+</html>
