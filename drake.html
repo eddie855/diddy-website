@@ -1,0 +1,65 @@
+<html>
+
+        function drawApple(x, y) {
+            ctx.font = '20px Arial';
+            ctx.fillText('👶', x * gridSize, y * gridSize + 18);
+        }
+
+        function gameLoop() {
+            requestAnimationFrame(gameLoop);
+
+            if (++frameCount < 5) return;
+            frameCount = 0;
+
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Move snake
+            const head = { x: snake[0].x + dx, y: snake[0].y + dy };
+            snake.unshift(head);
+
+            // Check apple collision
+            if (head.x === apple.x && head.y === apple.y) {
+                apple.x = Math.floor(Math.random() * tileCount);
+                apple.y = Math.floor(Math.random() * tileCount);
+            } else {
+                snake.pop();
+            }
+
+            // Draw snake
+            snake.forEach((segment, index) => {
+                if (index === 0) {
+                    ctx.drawImage(headImg, segment.x * gridSize, segment.y * gridSize, gridSize * 1.5, gridSize * 1.5);
+                } else {
+                    ctx.fillStyle = 'green';
+                    ctx.fillRect(segment.x * gridSize, segment.y * gridSize, gridSize, gridSize);
+                }
+            });
+
+            // Draw apple
+            drawApple(apple.x, apple.y);
+
+            // Collision check
+            if (head.x < 0 || head.y < 0 || head.x >= tileCount || head.y >= tileCount || snake.slice(1).some(s => s.x === head.x && s.y === head.y)) {
+                alert("Game Over!");
+                snake = [{ x: 10, y: 10 }];
+                dx = dy = 0;
+            }
+        }
+
+        let frameCount = 0;
+
+        document.addEventListener('keydown', e => {
+            switch (e.key) {
+                case 'ArrowUp': if (dy === 0) { dx = 0; dy = -1; } break;
+                case 'ArrowDown': if (dy === 0) { dx = 0; dy = 1; } break;
+                case 'ArrowLeft': if (dx === 0) { dx = -1; dy = 0; } break;
+                case 'ArrowRight': if (dx === 0) { dx = 1; dy = 0; } break;
+            }
+        });
+
+        headImg.onload = () => {
+            gameLoop();
+        };
+    </script>
+</body>
+</html>
