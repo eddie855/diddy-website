@@ -1,65 +1,104 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Diddy Snake</title>
+  <style>
+    body {
+      margin: 0;
+      background: #000;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    canvas {
+      background-color: #111;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="game" width="400" height="400"></canvas>
 
-        function drawApple(x, y) {
-            ctx.font = '20px Arial';
-            ctx.fillText('👶', x * gridSize, y * gridSize + 18);
-        }
+  <script>
+    const canvas = document.getElementById("game");
+    const ctx = canvas.getContext("2d");
 
-        function gameLoop() {
-            requestAnimationFrame(gameLoop);
+    const gridSize = 20;
+    let snake = [{ x: 200, y: 200 }];
+    let direction = "right";
+    let food = getRandomFood();
 
-            if (++frameCount < 5) return;
-            frameCount = 0;
+    const diddyImg = new Image();
+    diddyImg.src = "diddys face.avif"; // Must be in the same folder
 
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
+    document.addEventListener("keydown", e => {
+      const dirs = {
+        ArrowUp: "up",
+        ArrowDown: "down",
+        ArrowLeft: "left",
+        ArrowRight: "right"
+      };
+      const opposites = {
+        up: "down",
+        down: "up",
+        left: "right",
+        right: "left"
+      };
+      if (dirs[e.key] && dirs[e.key] !== opposites[direction]) {
+        direction = dirs[e.key];
+      }
+    });
 
-            // Move snake
-            const head = { x: snake[0].x + dx, y: snake[0].y + dy };
-            snake.unshift(head);
+    function getRandomFood() {
+      return {
+        x: Math.floor(Math.random() * (canvas.width / gridSize)) * gridSize,
+        y: Math.floor(Math.random() * (canvas.height / gridSize)) * gridSize
+      };
+    }
 
-            // Check apple collision
-            if (head.x === apple.x && head.y === apple.y) {
-                apple.x = Math.floor(Math.random() * tileCount);
-                apple.y = Math.floor(Math.random() * tileCount);
-            } else {
-                snake.pop();
-            }
+    function gameLoop() {
+      const head = { ...snake[0] };
+      if (direction === "up") head.y -= gridSize;
+      if (direction === "down") head.y += gridSize;
+      if (direction === "left") head.x -= gridSize;
+      if (direction === "right") head.x += gridSize;
 
-            // Draw snake
-            snake.forEach((segment, index) => {
-                if (index === 0) {
-                    ctx.drawImage(headImg, segment.x * gridSize, segment.y * gridSize, gridSize * 1.5, gridSize * 1.5);
-                } else {
-                    ctx.fillStyle = 'green';
-                    ctx.fillRect(segment.x * gridSize, segment.y * gridSize, gridSize, gridSize);
-                }
-            });
+      // Game Over Conditions
+      if (
+        head.x < 0 || head.y < 0 ||
+        head.x >= canvas.width || head.y >= canvas.height ||
+        snake.some(seg => seg.x === head.x && seg.y === head.y)
+      ) {
+        alert("💀 Game Over!");
+        window.location.reload();
+        return;
+      }
 
-            // Draw apple
-            drawApple(apple.x, apple.y);
+      snake.unshift(head);
 
-            // Collision check
-            if (head.x < 0 || head.y < 0 || head.x >= tileCount || head.y >= tileCount || snake.slice(1).some(s => s.x === head.x && s.y === head.y)) {
-                alert("Game Over!");
-                snake = [{ x: 10, y: 10 }];
-                dx = dy = 0;
-            }
-        }
+      if (head.x === food.x && head.y === food.y) {
+        food = getRandomFood();
+      } else {
+        snake.pop();
+      }
 
-        let frameCount = 0;
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-        document.addEventListener('keydown', e => {
-            switch (e.key) {
-                case 'ArrowUp': if (dy === 0) { dx = 0; dy = -1; } break;
-                case 'ArrowDown': if (dy === 0) { dx = 0; dy = 1; } break;
-                case 'ArrowLeft': if (dx === 0) { dx = -1; dy = 0; } break;
-                case 'ArrowRight': if (dx === 0) { dx = 1; dy = 0; } break;
-            }
-        });
+      // Draw food
+      ctx.fillStyle = "red";
+      ctx.fillRect(food.x, food.y, gridSize, gridSize);
 
-        headImg.onload = () => {
-            gameLoop();
-        };
-    </script>
+      // Draw Diddy snake
+      for (let part of snake) {
+        ctx.drawImage(diddyImg, part.x, part.y, gridSize, gridSize);
+      }
+    }
+
+    diddyImg.onload = () => {
+      setInterval(gameLoop, 150);
+    };
+  </script>
 </body>
 </html>
