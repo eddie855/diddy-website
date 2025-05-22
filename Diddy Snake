@@ -4,7 +4,6 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Diddy Snake</title>
-      <center><a href="index.html"><button>BACK</button></a></center>
   <style>
     body {
       margin: 0;
