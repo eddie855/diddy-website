@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+  <meta charset="UTF-8">
   <title>Diddy Search Engine</title>
   <style>
     body {
@@ -8,6 +9,7 @@
       background-size: cover;
       font-family: Arial, sans-serif;
       text-align: center;
+      display: none; /* Hide content until password is validated */
     }
     input[type="text"] {
       padding: 10px;
@@ -22,36 +24,42 @@
       height: 180px;
     }
   </style>
- </head>
+  <script>
+    const password = prompt("Enter the password to access Diddy Search:");
+    if (password === "diddy123") {
+      document.addEventListener("DOMContentLoaded", () => {
+        document.body.style.display = "block";
+      });
+    } else {
+      alert("Access Denied!");
+      window.location.href = "https://www.google.com";
+    }
+  </script>
+</head>
 <body>
-<p><img src="diddy1.png" style="float:left;width:760px;height:200px;">
-<p><img src="diddy1.png" style="float:right;width:760px;height:200px;">
+  <p><img src="diddy1.png" style="float:left;width:760px;height:200px;"></p>
+  <p><img src="diddy1.png" style="float:right;width:760px;height:200px;"></p>
   <h1>Diddy Search</h1>
+
   <input type="text" id="searchQuery" placeholder="Type your search..."><br>
   <button onclick="search()">Search</button>
+
   <script>
     function search() {
       const query = document.getElementById('searchQuery').value;
       window.location.href = 'https://www.google.com/search?q=' + encodeURIComponent(query);
     }
   </script>
+
   <a href="https://www.amazon.com.au/Johnsons-Baby-1960258501-Oil-200mL/dp/B077P8VHJS" target="_blank">
-    <button>Johnson's Baby Oil</button></a>
-   <a href="mouth.html"><button>Whats inside diddys mouth?</button></a>
+    <button>Johnson's Baby Oil</button>
+  </a>
+  <a href="mouth.html"><button>Whats inside diddys mouth?</button></a>
   <a href="game1.html"><button>Wanna play a game?</button></a>
-    <a href="game2.html"><button>Wanna play another game?</button></a>
+  <a href="game2.html"><button>Wanna play another game?</button></a>
   <a href="game3.html"><button>Wanna play another game?</button></a>
   <a href="game4.html"><button>Wanna play another game?</button></a>
-    <a href="drake.html"><button>Wanna play another game?</button></a>
-    <a href="post ur own.html"><button>Wanna play your own game?</button></a>
-<script>
-  const password = prompt("Enter the password to access index.html:");
-  if (password === "diddy123")
-  } else {
-    alert("Access Denied!");
-    window.location.href = "https://www.google.com";
-  }
-</script>
-<meta charset="UTF-8">
+  <a href="drake.html"><button>Wanna play another game?</button></a>
+  <a href="post ur own.html"><button>Wanna play your own game?</button></a>
 </body>
 </html>
