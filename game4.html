@@ -9,6 +9,7 @@
       background: #fef9e7;
       text-align: center;
       padding: 30px;
+      overflow-x: hidden;
     }
     h1 {
       font-size: 40px;
@@ -31,6 +32,25 @@
       cursor: pointer;
       font-size: 18px;
       border-radius: 8px;
+    }
+    .squirt {
+      position: absolute;
+      width: 30px;
+      height: 30px;
+      background-color: black;
+      border-radius: 50%;
+      animation: squirtUp 0.6s ease-out forwards;
+      pointer-events: none;
+    }
+    @keyframes squirtUp {
+      0% {
+        transform: translateY(0) scale(1);
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(-100px) scale(0.3);
+        opacity: 0;
+      }
     }
   </style>
 </head>
@@ -55,9 +75,10 @@
     const coinDisplay = document.getElementById("coins");
     const diddy = document.getElementById("diddy");
 
-    diddy.addEventListener("click", () => {
+    diddy.addEventListener("click", (e) => {
       coins += coinsPerClick;
       updateDisplay();
+      squirtOil(e.pageX, e.pageY);
     });
 
     function updateDisplay() {
@@ -90,6 +111,17 @@
       coins += autoCoins;
       updateDisplay();
     }, 1000);
+
+    function squirtOil(x, y) {
+      const squirt = document.createElement('div');
+      squirt.classList.add('squirt');
+      squirt.style.left = (x - 15) + 'px';
+      squirt.style.top = (y - 15) + 'px';
+      document.body.appendChild(squirt);
+      setTimeout(() => {
+        squirt.remove();
+      }, 600);
+    }
   </script>
 
 </body>
