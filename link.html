@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Play Song Button</title>
+  <title>Play Diddy Song</title>
   <style>
     body, html {
       height: 100%;
@@ -30,18 +30,22 @@
 </head>
 <body>
 
-  <button id="playButton">Play "Last Night"</button>
-  <audio id="song">
-    <source src="last-night.mp3" type="audio/mpeg">
+  <button id="playButton">Play Diddy Song</button>
+
+  <audio id="oilSound">
+    <source src="oil-sound.mp3" type="audio/mpeg">
     Your browser does not support the audio element.
   </audio>
 
   <script>
     const button = document.getElementById('playButton');
-    const song = document.getElementById('song');
+    const oilSound = document.getElementById('oilSound');
 
     button.addEventListener('click', () => {
-      song.play();
+      oilSound.play();
+      setTimeout(() => {
+        window.location.href = 'https://www.youtube.com/watch?v=AlqlKvA-qYo';
+      }, 500); // slight delay to let the sound start playing
     });
   </script>
 
