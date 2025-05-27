@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Diddle - Diddy Wordle</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: #f0e4d7;
+      text-align: center;
+      margin: 0;
+      padding: 20px;
+    }
+
+    h1 {
+      color: #d35400;
+    }
+
+    #board {
+      display: grid;
+      grid-template-columns: repeat(5, 60px);
+      gap: 10px;
+      justify-content: center;
+      margin-top: 20px;
+      margin-bottom: 20px;
+    }
+
+    .tile {
+      width: 60px;
+      height: 60px;
+      line-height: 60px;
+      font-size: 32px;
+      border: 2px solid #ccc;
+      text-transform: uppercase;
+      background-color: white;
+    }
+
+    .correct {
+      background-color: #6aaa64;
+      color: white;
+    }
+
+    .present {
+      background-color: #c9b458;
+      color: white;
+    }
+
+    .absent {
+      background-color: #787c7e;
+      color: white;
+    }
+
+    input[type="text"] {
+      padding: 10px;
+      font-size: 18px;
+      text-transform: uppercase;
+      width: 200px;
+      text-align: center;
+    }
+
+    button {
+      padding: 10px 20px;
+      margin-left: 10px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    #result {
+      margin-top: 20px;
+      font-size: 18px;
+    }
+  </style>
+</head>
+<body>
+
+<h1>🧩 Diddle: Diddy's Wordle</h1>
+<p>Guess the Diddy-related word!</p>
+
+<div id="board"></div>
+
+<input type="text" id="guessInput" maxlength="5" placeholder="Enter guess">
+<button onclick="submitGuess()">Guess</button>
+
+<div id="result"></div>
+
+<script>
+  const diddyWords = ["diddy", "oilty", "drake", "games", "mouth", "babyx", "aviva"];
+  const answer = diddyWords[Math.floor(Math.random() * diddyWords.length)].toUpperCase();
+
+  let attempts = [];
+
+  function updateBoard() {
+    const board = document.getElementById("board");
+    board.innerHTML = "";
+    attempts.forEach(word => {
+      for (let i = 0; i < 5; i++) {
+        const tile = document.createElement("div");
+        tile.classList.add("tile");
+        tile.textContent = word[i];
+
+        if (word[i] === answer[i]) {
+          tile.classList.add("correct");
+        } else if (answer.includes(word[i])) {
+          tile.classList.add("present");
+        } else {
+          tile.classList.add("absent");
+        }
+
+        board.appendChild(tile);
+      }
+    });
+  }
+
+  function submitGuess() {
+    const input = document.getElementById("guessInput");
+    const guess = input.value.toUpperCase();
+
+    if (guess.length !== 5) {
+      alert("Please enter a 5-letter word.");
+      return;
+    }
+
+    if (!diddyWords.includes(guess.toLowerCase())) {
+      alert("Not a valid Diddy word!");
+      return;
+    }
+
+    attempts.push(guess);
+    updateBoard();
+    input.value = "";
+
+    if (guess === answer) {
+      document.getElementById("result").textContent = "🎉 You guessed it! The word was " + answer;
+    } else if (attempts.length >= 6) {
+      document.getElementById("result").textContent = "❌ Out of attempts! The word was " + answer;
+    }
+  }
+</script>
+
+</body>
+</html>
